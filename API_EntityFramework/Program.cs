@@ -1,12 +1,27 @@
+using API_EntityFramework;
+using API_EntityFramework.Servicios;
+using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // ** Configura servicios ***
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(x =>
+                                                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddDbContext<AppDbContext>(options => 
+   options.UseSqlServer(builder.Configuration.GetConnectionString("default"))
+   );
+
+builder.Services.AddTransient<IServicio, ServicioA>();
+//builder.Services.AddTransient<ServicioA>(); // De esta manera se instancia una clase como servicio
+builder.Services.AddSwaggerGen(c =>
+    c.SwaggerDoc("v1",new Microsoft.OpenApi.Models.OpenApiInfo {Title="WebApiAutores", Version= "v1" })
+);
 
 var app = builder.Build();
 
