@@ -1,4 +1,5 @@
 using API_EntityFramework;
+using API_EntityFramework.Filtros;
 using API_EntityFramework.Servicios;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
@@ -18,6 +19,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
    );
 
 builder.Services.AddTransient<IServicio, ServicioA>();
+builder.Services.AddTransient<MiFiltroAccion>();
 //builder.Services.AddTransient<ServicioA>(); // De esta manera se instancia una clase como servicio
 builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1",new Microsoft.OpenApi.Models.OpenApiInfo {Title="WebApiAutores", Version= "v1" })

@@ -1,4 +1,5 @@
 ﻿using API_EntityFramework.Entidades;
+using API_EntityFramework.Filtros;
 using API_EntityFramework.Servicios;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -24,10 +25,11 @@ namespace API_EntityFramework.Controllers
 
         // GET: api/<AutoresController>
         [HttpGet]
+        [ServiceFilter(typeof(MiFiltroAccion))]
         public async Task<ActionResult<List<Autor>>> GetAutores()
         {
             _logger.LogInformation("Obteniendo los autores de base de datos");
-            _servicio.RealizarTarea();
+            //_servicio.RealizarTarea();
             return await _context.Autores.Include(x => x.Libros).ToListAsync();
         }
 
