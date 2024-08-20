@@ -16,29 +16,26 @@ namespace API_EntityFramework.Controllers
     {
         private readonly AppDbContext _context;
         private readonly ILogger<AutoresController> _logger;
-        private readonly IServicio _servicio;
-        public AutoresController(AppDbContext context, ILogger<AutoresController> logger, IServicio servicio)
+        
+        public AutoresController(AppDbContext context, ILogger<AutoresController> logger)
         {
             _context = context;
             _logger = logger;
-            _servicio = servicio;
+         
         }
 
         // GET: api/<AutoresController>
         [HttpGet]
-        [ServiceFilter(typeof(MiFiltroAccion))]
-        [Authorize]
         public async Task<ActionResult<List<Autor>>> GetAutores()
         {
-            _logger.LogInformation("Obteniendo los autores de base de datos");
-            //_servicio.RealizarTarea();
+           
             return await _context.Autores.Include(x => x.Libros).ToListAsync();
         }
 
         //[HttpGet("{param?}")] - Se puede marcar un parametro como opcional agregando el signo ?
         //[HttpGet("{param= persona}")] - Se puede dar un valor por default a un parametro agregando = value
         [HttpGet("{id:int}")]
-        [ResponseCache(Duration =10)] //Proximas respuestas en 10 segundas responde data que este en cache.
+        //[ResponseCache(Duration =10)] //Proximas respuestas en 10 segundas responde data que este en cache.
         public async Task<ActionResult<Autor>> GetAutor([FromRoute] int id)
         {
             var autor = await _context.Autores.FirstOrDefaultAsync(x => x.Id == id); // Se guarda en cache

@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API_EntityFramework.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240721220544_Libros")]
-    partial class Libros
+    [Migration("20240820145940_Initial-Create")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -33,7 +33,8 @@ namespace API_EntityFramework.Migrations
 
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
