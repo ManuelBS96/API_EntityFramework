@@ -1,6 +1,7 @@
 ﻿using API_EntityFramework.Entidades;
 using API_EntityFramework.Filtros;
 using API_EntityFramework.Servicios;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Mime;
@@ -26,6 +27,7 @@ namespace API_EntityFramework.Controllers
         // GET: api/<AutoresController>
         [HttpGet]
         [ServiceFilter(typeof(MiFiltroAccion))]
+        [Authorize]
         public async Task<ActionResult<List<Autor>>> GetAutores()
         {
             _logger.LogInformation("Obteniendo los autores de base de datos");
@@ -36,9 +38,10 @@ namespace API_EntityFramework.Controllers
         //[HttpGet("{param?}")] - Se puede marcar un parametro como opcional agregando el signo ?
         //[HttpGet("{param= persona}")] - Se puede dar un valor por default a un parametro agregando = value
         [HttpGet("{id:int}")]
+        [ResponseCache(Duration =10)] //Proximas respuestas en 10 segundas responde data que este en cache.
         public async Task<ActionResult<Autor>> GetAutor([FromRoute] int id)
         {
-            var autor = await _context.Autores.FirstOrDefaultAsync(x => x.Id == id);
+            var autor = await _context.Autores.FirstOrDefaultAsync(x => x.Id == id); // Se guarda en cache
 
             if (autor is null) return NotFound("No existe un autor con este id");
 

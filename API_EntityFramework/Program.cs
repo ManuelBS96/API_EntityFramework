@@ -1,6 +1,7 @@
 using API_EntityFramework;
 using API_EntityFramework.Filtros;
 using API_EntityFramework.Servicios;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
@@ -20,6 +21,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddTransient<IServicio, ServicioA>();
 builder.Services.AddTransient<MiFiltroAccion>();
+builder.Services.AddResponseCaching();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
 //builder.Services.AddTransient<ServicioA>(); // De esta manera se instancia una clase como servicio
 builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1",new Microsoft.OpenApi.Models.OpenApiInfo {Title="WebApiAutores", Version= "v1" })
@@ -37,7 +40,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseResponseCaching();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
