@@ -21,6 +21,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddTransient<IServicio, ServicioA>();
 builder.Services.AddTransient<MiFiltroAccion>();
+builder.Services.AddHostedService<EscribirEnArchivo>(); 
+
 builder.Services.AddResponseCaching();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
 //builder.Services.AddTransient<ServicioA>(); // De esta manera se instancia una clase como servicio
